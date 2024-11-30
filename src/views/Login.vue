@@ -1,10 +1,18 @@
 <script setup>
 import { ref, reactive } from "vue";
+import { login, getinfo } from "../api/manager";
+import { useRouter } from "vue-router";
+import { toast } from "../composables/util";
+import { getToken, setToken } from "../composables/auth";
+import store from "../store/index.js";
 
 const form = reactive({
   username: "",
   password: "",
 });
+
+const router = useRouter();
+const isLoading = ref(false);
 
 const rules = {
   username: [{ required: true, message: "账号名不能为空", trigger: "blur" }],
@@ -18,10 +26,25 @@ const formRef = ref(null);
 const onSubmit = () => {
   formRef.value.validate((valid) => {
     if (!valid) {
-      console.log("验证失败！");
-    } else {
-      console.log("验证成功!");
+      return false;
     }
+    isLoading.value = true;
+    login(form.username, form.password)
+      .then((res) => {
+        // 账号密码正确:
+        // 1.提示成功
+        toast("登录成功");
+        // 2.存储用户token到cookie中
+        setToken(res.token);
+        console.log(getToken());
+
+        // 3.跳转到主页
+        router.push("/");
+      })
+      .finally(() => {
+        isLoading.value = false;
+      });
+    // 不需要catch,在响应拦截器统一请求处理失败的响应
   });
 };
 </script>
@@ -73,6 +96,7 @@ const onSubmit = () => {
             class="w-[250px] bg-blue-400"
             type="primary"
             @click="onSubmit"
+            :loading="isLoading"
             >登录</el-button
           >
         </el-form-item>
