@@ -1,6 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
-import { login, getinfo } from "../api/manager";
+import { ref, reactive, onMounted, onBeforeUnmount, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "../composables/util";
 import { getToken, setToken } from "../composables/auth";
@@ -29,24 +28,30 @@ const onSubmit = () => {
       return false;
     }
     isLoading.value = true;
-    login(form.username, form.password)
+    store
+      .dispatch("login", form)
       .then((res) => {
-        // 账号密码正确:
-        // 1.提示成功
-        toast("登录成功");
-        // 2.存储用户token到cookie中
-        setToken(res.token);
-        console.log(getToken());
-
-        // 3.跳转到主页
+        toast("登录成功！");
         router.push("/");
       })
       .finally(() => {
         isLoading.value = false;
-      });
-    // 不需要catch,在响应拦截器统一请求处理失败的响应
+      }); // 不需要catch,在响应拦截器统一请求处理失败的响应
   });
 };
+
+function onKeyUp(e) {
+  if (e.key == "Enter") onSubmit();
+}
+//在组件渲染后，添加键盘监听
+onMounted(() => {
+  document.addEventListener("keyup", onKeyUp);
+});
+
+//在组件卸载前，移除键盘监听
+onBeforeMount(() => {
+  document.removeEventListener("keyup", onKeyUp);
+});
 </script>
 
 <template>

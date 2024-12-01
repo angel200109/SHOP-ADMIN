@@ -19,4 +19,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(store); //使用vuex的store实例
 
 import "./permission"; //犯错：记得要import!!!
+import "nprogress/nprogress.css";
 app.mount("#app");
