@@ -2,6 +2,9 @@ import axios from "axios";
 import { ElNotification } from "element-plus";
 import { getToken } from "./composables/auth";
 import { toast } from "./composables/util";
+import store from "./store";
+import { removeToken } from "./composables/auth";
+
 const service = axios.create({
   baseURL: "/api",
 });
@@ -31,8 +34,16 @@ service.interceptors.response.use(
   },
 
   function (error) {
-    //4.对响应错误做点什么：设置错误弹窗
-    toast(error.response.data.msg, "error");
+    //4.对响应错误做点什么：设置错误弹窗 c
+    const msg = error.response.data.msg || "请求失败";
+    if (msg == "非法token，请先登录！") {
+      location.reload();
+      // store,
+      //   dispatch("logout").finally(() => {
+      //     location.reload();
+      //   });老师方法
+    }
+    toast(msg, "error");
     return Promise.reject(error);
   }
 );
