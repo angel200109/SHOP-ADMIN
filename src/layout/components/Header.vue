@@ -9,10 +9,12 @@ const {
   // 切换全屏
   toggle,
 } = useFullscreen();
+
 //这个是引入封装的api
 const { form, formRef, formDrawerRef, rules, onSubmit, openDrawForm } =
   useRepassword();
 const { handleLogout } = useLogout();
+
 const handleRefresh = () => location.reload();
 
 const handleCommand = (c) => {

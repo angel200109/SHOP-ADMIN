@@ -42,7 +42,6 @@ const store = createStore({
           .then((res) => {
             // 如果请求成功
             commit("SET_USERINFO", res);
-            console.error("success:", res);
             resolve(res); // 返回请求结果
           })
           .catch((err) => {

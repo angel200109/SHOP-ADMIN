@@ -3,7 +3,8 @@ import Login from "../views/Login.vue";
 import Index from "../views/Index.vue";
 import NotFound from "../views/404NotFound.vue";
 import Test from "../views/test.vue";
-import Admin from "../layout/admin.vue";
+import Admin from "~/layout/admin.vue";
+import GoodList from "../views/goods/list.vue";
 
 const routes = [
   {
@@ -15,6 +16,14 @@ const routes = [
         component: Index,
         meta: {
           title: "后台首页",
+        },
+      },
+      {
+        path: "/goods/list",
+        name: "GoodList",
+        component: GoodList,
+        meta: {
+          title: "商品管理",
         },
       },
     ],
@@ -32,6 +41,7 @@ const routes = [
     name: "Test",
     component: Test,
   },
+
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
