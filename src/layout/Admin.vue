@@ -8,7 +8,7 @@ import tagList from "./components/tagList.vue";
   <el-container>
     <el-header><Header></Header></el-header>
     <el-container>
-      <el-aside><Menu></Menu></el-aside>
+      <el-aside :width="$store.state.asideWidth"><Menu></Menu></el-aside>
       <el-main>
         <div><tagList></tagList></div>
         <router-view></router-view>
@@ -16,3 +16,8 @@ import tagList from "./components/tagList.vue";
     </el-container>
   </el-container>
 </template>
+<style>
+.el-aside {
+  transition: all 0.2s;
+}
+</style>

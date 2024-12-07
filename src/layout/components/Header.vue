@@ -33,7 +33,9 @@ const handleCommand = (c) => {
     <span class="logo">
       <el-icon class="mr-1"><Shop /></el-icon>后台管理系统
     </span>
-    <el-icon class="icon-btn"><fold /></el-icon>
+    <el-icon class="icon-btn" @click="$store.commit('handAsideWidth')"
+      ><fold v-if="$store.state.asideWidth == '250px'" /> <expand v-else />
+    </el-icon>
     <el-icon class="icon-btn" @click="handleRefresh"><refresh /></el-icon>
 
     <!-- 靠右 -->

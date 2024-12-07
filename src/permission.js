@@ -1,5 +1,5 @@
 //*******************全局路由守卫*******************
-import router from "./router";
+import { router, addRoutes } from "./router";
 import { getToken } from "./composables/auth";
 import { toast, showFullLoading, hideFullLoading } from "./composables/util";
 import store from "./store";
@@ -19,14 +19,17 @@ router.beforeEach(async (to, from, next) => {
     return next({ path: from.path ? from.path : "/" });
   }
   // 如果用户登录了，自动将用户相关信息存储到store中
+  let hasNewRoutes = false;
   if (token) {
-    await store.dispatch("getinfo");
+    let { menus } = await store.dispatch("getinfo");
+    //console.log(menus);
+    hasNewRoutes = addRoutes(menus);
   }
 
   //设置页面标题
   let title = (to.meta.title ? to.meta.title : "") + "-商场后台";
   document.title = title;
-  next();
+  hasNewRoutes ? next(to.fullPath) : next();
 });
 
 //全局后置守卫

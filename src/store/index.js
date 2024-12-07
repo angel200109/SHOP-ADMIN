@@ -9,6 +9,9 @@ const store = createStore({
   state() {
     return {
       user: {},
+      asideWidth: "250px",
+      menus: [],
+      ruleNames: [],
     };
   },
 
@@ -16,6 +19,16 @@ const store = createStore({
   mutations: {
     SET_USERINFO(state, user) {
       state.user = user;
+    },
+    handAsideWidth(state) {
+      return (state.asideWidth =
+        state.asideWidth == "250px" ? "64px" : "250px");
+    },
+    SET_MENUS(state, menus) {
+      state.menus = menus;
+    },
+    SET_RULESNAME(state, ruleNames) {
+      state.ruleNames = ruleNames;
     },
   },
 
@@ -42,6 +55,9 @@ const store = createStore({
           .then((res) => {
             // 如果请求成功
             commit("SET_USERINFO", res);
+            //console.log(res);
+            commit("SET_MENUS", res.menus);
+            commit("SET_RULESNAME", res.ruleNames);
             resolve(res); // 返回请求结果
           })
           .catch((err) => {

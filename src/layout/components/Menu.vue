@@ -1,37 +1,33 @@
 <script setup>
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { useStore } from "vuex";
+import { computed, ref } from "vue";
 const router = useRouter();
-const asideMenus = [
-  {
-    name: "后台面板",
-    icon: "help",
-    child: [
-      {
-        name: "主控台",
-        icon: "home-filled",
-        frontpath: "/",
-      },
-    ],
-  },
-  {
-    name: "商城管理",
-    icon: "shopping-bag",
-    child: [
-      {
-        name: "商品管理",
-        icon: "shopping-cart-full",
-        frontpath: "/goods/list",
-      },
-    ],
-  },
-];
+const store = useStore();
+const route = useRoute();
+const defaultActive = ref(route.path);
+const asideMenus = computed(() => store.state.menus);
+
 const handleSelect = (c) => {
   router.push(c);
 };
+const isCollapse = computed(() => {
+  //值变化的时候，会重新计算，重新渲染
+  if (store.state.asideWidth == "250px") return false;
+  else return true;
+});
 </script>
+
 <template>
-  <div class="menu">
-    <el-menu default-active="2" class="border-0" @select="handleSelect">
+  <div class="menu" :style="{ width: $store.state.asideWidth }">
+    <el-menu
+      unique-opened
+      :collapse="isCollapse"
+      class="border-0"
+      @select="handleSelect"
+      :collapse-transition="false"
+      :default-active="defaultActive"
+    >
       <template v-for="(item, index) in asideMenus" :key="index">
         <!-- 如果有二级菜单 -->
         <el-sub-menu v-if="item.child" :index="item.name">
@@ -61,11 +57,16 @@ const handleSelect = (c) => {
 </template>
 <style>
 .menu {
-  width: 250px;
+  transition: all 0.2s;
   top: 64px;
   left: 0px;
   bottom: 0px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+
   @apply fixed shadow-md bg-light-50;
+}
+.menu::-webkit-scrollbar {
+  width: 0px;
 }
 </style>
