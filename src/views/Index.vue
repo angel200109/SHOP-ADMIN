@@ -18,5 +18,6 @@ const router = useRouter();
         <div class="bg-red-900">主要内容</div></el-main
       >
     </el-container>
-  </el-container> -->11111
+  </el-container> -->
+  <div>主控台</div>
 </template>

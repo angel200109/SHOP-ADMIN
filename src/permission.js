@@ -5,6 +5,7 @@ import { toast, showFullLoading, hideFullLoading } from "./composables/util";
 import store from "./store";
 
 //全局前置守卫
+let hasGetInfo = false;
 router.beforeEach(async (to, from, next) => {
   showFullLoading();
   const token = getToken(); //犯错：要写在里面！！！每次获取新token！！！
@@ -20,10 +21,11 @@ router.beforeEach(async (to, from, next) => {
   }
   // 如果用户登录了，自动将用户相关信息存储到store中
   let hasNewRoutes = false;
-  if (token) {
+  if (token && !hasGetInfo) {
     let { menus } = await store.dispatch("getinfo");
     //console.log(menus);
     hasNewRoutes = addRoutes(menus);
+    hasGetInfo = true;
   }
 
   //设置页面标题

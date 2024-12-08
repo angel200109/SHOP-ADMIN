@@ -1,1 +1,1 @@
-<template>商品管理</template>
+<template><div>商品管理</div></template>
