@@ -79,7 +79,7 @@ export function addRoutes(menus) {
   };
   findAndAddRoutesByMenus(menus);
   // 当前的路由
-  console.log("当前的路由：");
-  console.log(router.getRoutes());
+  // console.log("当前的路由：");
+  // console.log(router.getRoutes());
   return hasNewRoutes;
 }

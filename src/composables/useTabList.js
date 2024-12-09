@@ -14,24 +14,6 @@ export function useTabList() {
       path: "/",
     },
   ]);
-  function addTab(tab) {
-    let newTab = tabList.value.findIndex((t) => t.path == tab.path) == -1;
-    if (newTab) {
-      tabList.value.push(tab);
-    }
-    cookie.set("tabList", tabList.value);
-  }
-  onBeforeRouteUpdate((to, from) => {
-    activeTab.value = to.path;
-    addTab({
-      title: to.meta.title,
-      path: to.path,
-    });
-  });
-  const changeTab = (t) => {
-    activeTab.value = t;
-    router.push(t);
-  };
 
   // 初始化标签导航列表
   function initTabList() {
@@ -42,6 +24,31 @@ export function useTabList() {
   }
   initTabList();
 
+  // 标签导航监听tab-change事件的方法
+  const changeTab = (t) => {
+    console.log(t); // 会打印标签导航的name值
+    activeTab.value = t;
+    router.push(t);
+  };
+
+  // 添加标签导航
+  function addTab(tab) {
+    let newTab = tabList.value.findIndex((t) => t.path == tab.path) == -1;
+    if (newTab) {
+      tabList.value.push(tab);
+    }
+    cookie.set("tabList", tabList.value);
+  }
+
+  onBeforeRouteUpdate((to, from) => {
+    activeTab.value = to.path;
+    addTab({
+      title: to.meta.title,
+      path: to.path,
+    });
+  });
+
+  // 删除标签导航
   const removeTab = (t) => {
     let tabs = tabList.value;
     let a = activeTab.value;
@@ -62,13 +69,14 @@ export function useTabList() {
     cookie.set("tabList", tabList.value);
   };
 
+  // 下拉菜单监听command事件的方法
   const handleCommand = (c) => {
     console.log(c);
     if (c == "clearAll") {
-      //切换回首页
+      // 切换回首页
       activeTab.value = "/";
       router.push("/"); // 应该不用手动push才对
-      //过滤只剩下首页
+      // 过滤只剩下首页
       tabList.value = [
         {
           title: "后台首页",
@@ -83,6 +91,7 @@ export function useTabList() {
     }
     cookie.set("tabList", tabList.value);
   };
+
   return {
     activeTab,
     tabList,
